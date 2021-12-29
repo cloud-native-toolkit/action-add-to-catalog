@@ -383,6 +383,7 @@ class YamlFile {
             logger.info(`Loaded file contents: ${contents.toString()}`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = js_yaml_1.default.load(contents.toString());
+            logger.info(`Parsed result: ${JSON.stringify(result)}`);
             return new YamlFile(file, result);
         });
     }

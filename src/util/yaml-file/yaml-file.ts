@@ -30,6 +30,8 @@ export class YamlFile<T = any> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: S = YAML.load(contents.toString()) as any
 
+    logger.info(`Parsed result: ${JSON.stringify(result)}`)
+
     return new YamlFile(file, result)
   }
 
