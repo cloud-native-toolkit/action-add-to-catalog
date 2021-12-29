@@ -64,6 +64,7 @@ export class AddToCatalog {
     )
     this.validateModuleDuplication(catalog.contents, values.name)
 
+    logger.info(`Finding category in catalog: ${values.category}`)
     const category: CatalogCategory = first(
       catalog.contents.categories.filter(c => c.category === values.category)
     ).orElseThrow(() => new MissingCategoryError(values.category))

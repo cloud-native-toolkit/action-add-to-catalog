@@ -119,6 +119,7 @@ class AddToCatalog {
             const catalog = yield util_1.YamlFile.load(values.catalogFile);
             logger.info(`Validating module name does not exist in the catalog: ${values.name}`);
             this.validateModuleDuplication(catalog.contents, values.name);
+            logger.info(`Finding category in catalog: ${values.category}`);
             const category = (0, util_1.first)(catalog.contents.categories.filter(c => c.category === values.category)).orElseThrow(() => new MissingCategoryError(values.category));
             category.modules.push(this.buildModule(values));
             yield catalog.write();
@@ -380,10 +381,10 @@ class YamlFile {
             }
             logger.debug(`Loading file: ${fullPath}`);
             const contents = yield fs_extra_1.default.readFile(fullPath);
-            logger.info(`Loaded file contents: ${contents.toString()}`);
+            logger.debug(`Loaded file contents: ${contents.toString()}`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = js_yaml_1.default.load(contents.toString());
-            logger.info(`Parsed result: ${JSON.stringify(result)}`);
+            logger.debug(`Parsed result: ${JSON.stringify(result)}`);
             return new YamlFile(file, result);
         });
     }
