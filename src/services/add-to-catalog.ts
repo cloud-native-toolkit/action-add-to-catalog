@@ -1,9 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import {YamlFile} from '../util/yaml-file'
-import {first} from '../util/first'
-import {LoggerApi} from '../util/logger';
-import {Container} from 'typescript-ioc';
+import {Container} from 'typescript-ioc'
+import {first, LoggerApi, YamlFile} from '../util'
 
 export interface AddToCatalogParams {
   catalogFile: string

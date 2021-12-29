@@ -1,9 +1,12 @@
 import * as core from '@actions/core'
 import {Container} from 'typescript-ioc'
-import {LoggerApi} from './util/logger'
+import {LoggerApi} from './util'
 import {AddToCatalog} from './services/add-to-catalog'
+import {ActionLogger} from './util/logger/logger.action'
 
 async function run(): Promise<void> {
+  Container.bind(LoggerApi).to(ActionLogger)
+
   const logger: LoggerApi = Container.get(LoggerApi)
 
   try {

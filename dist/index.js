@@ -37,11 +37,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const typescript_ioc_1 = __nccwpck_require__(1444);
-const logger_1 = __nccwpck_require__(6566);
+const util_1 = __nccwpck_require__(5063);
 const add_to_catalog_1 = __nccwpck_require__(9515);
+const logger_action_1 = __nccwpck_require__(4942);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const logger = typescript_ioc_1.Container.get(logger_1.LoggerApi);
+        typescript_ioc_1.Container.bind(util_1.LoggerApi).to(logger_action_1.ActionLogger);
+        const logger = typescript_ioc_1.Container.get(util_1.LoggerApi);
         try {
             const catalogFile = core.getInput('catalogFile');
             const category = core.getInput('category');
@@ -93,8 +95,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddToCatalog = exports.DuplicateModuleError = exports.MissingCategoryError = void 0;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const yaml_file_1 = __nccwpck_require__(3468);
-const first_1 = __nccwpck_require__(1307);
+const typescript_ioc_1 = __nccwpck_require__(1444);
+const util_1 = __nccwpck_require__(5063);
 class MissingCategoryError extends Error {
     constructor(category) {
         super(`Unable to find category: ${category}`);
@@ -112,9 +114,11 @@ exports.DuplicateModuleError = DuplicateModuleError;
 class AddToCatalog {
     run(values) {
         return __awaiter(this, void 0, void 0, function* () {
-            const catalog = yield yaml_file_1.YamlFile.load(values.catalogFile);
+            const logger = typescript_ioc_1.Container.get(util_1.LoggerApi);
+            logger.info(`Loading catalog file: ${values.catalogFile}`);
+            const catalog = yield util_1.YamlFile.load(values.catalogFile);
             this.validateModuleDuplication(catalog.contents, values.name);
-            const category = (0, first_1.first)(catalog.contents.categories.filter(c => c.category === values.category)).orElseThrow(() => new MissingCategoryError(values.category));
+            const category = (0, util_1.first)(catalog.contents.categories.filter(c => c.category === values.category)).orElseThrow(() => new MissingCategoryError(values.category));
             category.modules.push(this.buildModule(values));
             yield catalog.write();
         });
@@ -166,6 +170,29 @@ exports.first = first;
 
 /***/ }),
 
+/***/ 5063:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__nccwpck_require__(1307), exports);
+__exportStar(__nccwpck_require__(6566), exports);
+__exportStar(__nccwpck_require__(3468), exports);
+
+
+/***/ }),
+
 /***/ 6566:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -187,6 +214,52 @@ const logger_api_1 = __nccwpck_require__(6005);
 const logger_console_1 = __nccwpck_require__(8379);
 __exportStar(__nccwpck_require__(6005), exports);
 typescript_ioc_1.Container.bind(logger_api_1.LoggerApi).to(logger_console_1.ConsoleLogger);
+
+
+/***/ }),
+
+/***/ 4942:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ActionLogger = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+class ActionLogger {
+    debug(message) {
+        core.debug(message);
+    }
+    error(message, properties) {
+        core.error(message, properties);
+    }
+    info(message) {
+        core.info(message);
+    }
+    warning(message, properties) {
+        core.warning(message, properties);
+    }
+}
+exports.ActionLogger = ActionLogger;
 
 
 /***/ }),
@@ -289,6 +362,9 @@ class YamlFile {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static load(file) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!fs_extra_1.default.existsSync(file)) {
+                throw new Error(`File not found: ${file}`);
+            }
             const contents = yield fs_extra_1.default.readFile(file);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = js_yaml_1.default.load(contents.toString());
