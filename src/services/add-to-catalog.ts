@@ -2,6 +2,8 @@
 // @ts-ignore
 import {YamlFile} from '../util/yaml-file'
 import {first} from '../util/first'
+import {LoggerApi} from '../util/logger';
+import {Container} from 'typescript-ioc';
 
 export interface AddToCatalogParams {
   catalogFile: string
@@ -54,6 +56,9 @@ export class DuplicateModuleError extends Error {
 
 export class AddToCatalog {
   async run(values: AddToCatalogParams): Promise<void> {
+    const logger: LoggerApi = Container.get(LoggerApi)
+
+    logger.info(`Loading catalog file: ${values.catalogFile}`)
     const catalog: YamlFile<Catalog> = await YamlFile.load(values.catalogFile)
 
     this.validateModuleDuplication(catalog.contents, values.name)

@@ -17,7 +17,7 @@ inputs:
     description: 'The source id of the module (e.g. the git repo slug)'
   group:
     required: false
-    description: 'The grouo the module is part of'
+    description: 'The group the module is part of'
   cloudProvider:
     required: false
     description: 'The cloud provider, if applicable, for the module. (E.g. ibm, aws, azure)'

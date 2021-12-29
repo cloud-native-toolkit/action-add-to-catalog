@@ -13,6 +13,10 @@ export class YamlFile<T = any> {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static async load<S = any>(file: string): Promise<YamlFile<S>> {
+    if (!fs.existsSync(file)) {
+      throw new Error(`File not found: ${file}`)
+    }
+
     const contents: Buffer = await fs.readFile(file)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
