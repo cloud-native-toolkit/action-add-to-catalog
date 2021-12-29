@@ -127,7 +127,8 @@ class AddToCatalog {
     validateModuleDuplication(catalog, name) {
         const matchingModules = catalog.categories
             .reduce((result, current) => {
-            result.push(...current.modules);
+            const modules = current.modules || [];
+            result.push(...modules);
             return result;
         }, [])
             .filter(m => m.name === name);

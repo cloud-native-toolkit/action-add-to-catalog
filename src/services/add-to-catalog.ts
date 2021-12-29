@@ -76,7 +76,8 @@ export class AddToCatalog {
   validateModuleDuplication(catalog: Catalog, name: string): void {
     const matchingModules: CatalogModule[] = catalog.categories
       .reduce((result: CatalogModule[], current: CatalogCategory) => {
-        result.push(...current.modules)
+        const modules = current.modules || []
+        result.push(...modules)
 
         return result
       }, [])
