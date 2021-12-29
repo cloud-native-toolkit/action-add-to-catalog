@@ -129,7 +129,7 @@ class AddToCatalog {
             throw new Error('Catalog missing!!!');
         }
         if (!catalog.categories) {
-            throw new Error('Catalog categories missing!!');
+            throw new Error('Catalog categories missing!!!');
         }
         const matchingModules = catalog.categories
             .reduce((result, current) => {
@@ -380,7 +380,7 @@ class YamlFile {
             }
             logger.debug(`Loading file: ${fullPath}`);
             const contents = yield fs_extra_1.default.readFile(fullPath);
-            logger.debug(`Loaded file contents: ${contents.toString()}`);
+            logger.info(`Loaded file contents: ${contents.toString()}`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = js_yaml_1.default.load(contents.toString());
             return new YamlFile(file, result);

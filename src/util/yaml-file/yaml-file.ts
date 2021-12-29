@@ -26,7 +26,7 @@ export class YamlFile<T = any> {
     logger.debug(`Loading file: ${fullPath}`)
     const contents: Buffer = await fs.readFile(fullPath)
 
-    logger.debug(`Loaded file contents: ${contents.toString()}`)
+    logger.info(`Loaded file contents: ${contents.toString()}`)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: S = YAML.load(contents.toString()) as any
 

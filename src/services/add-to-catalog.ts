@@ -78,7 +78,7 @@ export class AddToCatalog {
       throw new Error('Catalog missing!!!')
     }
     if (!catalog.categories) {
-      throw new Error('Catalog categories missing!!')
+      throw new Error('Catalog categories missing!!!')
     }
 
     const matchingModules: CatalogModule[] = catalog.categories
