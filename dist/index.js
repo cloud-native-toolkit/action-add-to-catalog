@@ -149,13 +149,10 @@ class AddToCatalog {
         }
     }
     buildModule({ name, id, group, cloudProvider, softwareProvider }) {
-        return {
+        return Object.assign({
             name,
-            id,
-            group,
-            cloudProvider,
-            softwareProvider
-        };
+            id
+        }, group ? { group } : {}, cloudProvider ? { cloudProvider } : {}, softwareProvider ? { softwareProvider } : {});
     }
 }
 exports.AddToCatalog = AddToCatalog;

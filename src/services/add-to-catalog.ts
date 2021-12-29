@@ -109,12 +109,14 @@ export class AddToCatalog {
     cloudProvider,
     softwareProvider
   }: AddToCatalogParams): CatalogModule {
-    return {
-      name,
-      id,
-      group,
-      cloudProvider,
-      softwareProvider
-    }
+    return Object.assign(
+      {
+        name,
+        id
+      },
+      group ? {group} : {},
+      cloudProvider ? {cloudProvider} : {},
+      softwareProvider ? {softwareProvider} : {}
+    )
   }
 }
