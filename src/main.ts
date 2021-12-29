@@ -31,7 +31,6 @@ async function run(): Promise<void> {
 
     const service: AddToCatalog = Container.get(AddToCatalog)
     await service.run(input)
-
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
