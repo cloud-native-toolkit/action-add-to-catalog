@@ -117,6 +117,7 @@ class AddToCatalog {
             const logger = typescript_ioc_1.Container.get(util_1.LoggerApi);
             logger.info(`Loading catalog file: ${values.catalogFile}`);
             const catalog = yield util_1.YamlFile.load(values.catalogFile);
+            logger.info(`Validating module name does not exist in the catalog: ${values.name}`);
             this.validateModuleDuplication(catalog.contents, values.name);
             const category = (0, util_1.first)(catalog.contents.categories.filter(c => c.category === values.category)).orElseThrow(() => new MissingCategoryError(values.category));
             category.modules.push(this.buildModule(values));
@@ -353,6 +354,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.YamlFile = void 0;
 const fs_extra_1 = __importDefault(__nccwpck_require__(5630));
 const js_yaml_1 = __importDefault(__nccwpck_require__(1917));
+const path_1 = __nccwpck_require__(5622);
+const logger_1 = __nccwpck_require__(6566);
+const typescript_ioc_1 = __nccwpck_require__(1444);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class YamlFile {
     constructor(filename, contents) {
@@ -362,10 +366,14 @@ class YamlFile {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static load(file) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!fs_extra_1.default.existsSync(file)) {
-                throw new Error(`File not found: ${file}`);
+            const logger = typescript_ioc_1.Container.get(logger_1.LoggerApi);
+            const fullPath = (0, path_1.join)(process.cwd(), file);
+            if (!fs_extra_1.default.existsSync(fullPath)) {
+                throw new Error(`File not found: ${fullPath}`);
             }
-            const contents = yield fs_extra_1.default.readFile(file);
+            logger.debug(`Loading file: ${fullPath}`);
+            const contents = yield fs_extra_1.default.readFile(fullPath);
+            logger.debug(`Loaded file contents: ${contents.toString()}`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = js_yaml_1.default.load(contents.toString());
             return new YamlFile(file, result);

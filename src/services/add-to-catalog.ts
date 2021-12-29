@@ -59,7 +59,9 @@ export class AddToCatalog {
     logger.info(`Loading catalog file: ${values.catalogFile}`)
     const catalog: YamlFile<Catalog> = await YamlFile.load(values.catalogFile)
 
-    logger.info(`Validating module name does not exist in the catalog: ${values.name}`)
+    logger.info(
+      `Validating module name does not exist in the catalog: ${values.name}`
+    )
     this.validateModuleDuplication(catalog.contents, values.name)
 
     const category: CatalogCategory = first(
