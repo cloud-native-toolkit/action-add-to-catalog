@@ -408,7 +408,7 @@ class YamlFile {
     }
     write() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield fs_extra_1.default.writeFile(this.filename, this.contents);
+            yield fs_extra_1.default.writeFile(this.filename, js_yaml_1.default.dump(this.contents));
             return this;
         });
     }

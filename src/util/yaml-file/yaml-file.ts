@@ -56,7 +56,7 @@ export class YamlFile<T = any> {
   }
 
   async write(): Promise<YamlFile<T>> {
-    await fs.writeFile(this.filename, this.contents)
+    await fs.writeFile(this.filename, YAML.dump(this.contents))
 
     return this
   }
