@@ -21,4 +21,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          milliseconds: 1000
+          category: cluster
+          name: new-module
+          id: github.com/cloud-native-toolkit/terraform-ibm-new-module
+          cloudProvider: ibm
+          group: test
+      - run: cat catalog.yaml

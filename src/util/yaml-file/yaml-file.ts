@@ -1,5 +1,8 @@
 import fs from 'fs-extra'
 import YAML from 'js-yaml'
+import {join} from 'path'
+import {LoggerApi} from '../logger'
+import {Container} from 'typescript-ioc'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class YamlFile<T = any> {
@@ -13,10 +16,21 @@ export class YamlFile<T = any> {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static async load<S = any>(file: string): Promise<YamlFile<S>> {
-    const contents: Buffer = await fs.readFile(file)
+    const logger: LoggerApi = Container.get(LoggerApi)
 
+    const fullPath = join(process.cwd(), file)
+    if (!fs.existsSync(fullPath)) {
+      throw new Error(`File not found: ${fullPath}`)
+    }
+
+    logger.debug(`Loading file: ${fullPath}`)
+    const contents: Buffer = await fs.readFile(fullPath)
+
+    logger.debug(`Loaded file contents: ${contents.toString()}`)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: S = YAML.load(contents.toString()) as any
+
+    logger.debug(`Parsed result: ${JSON.stringify(result)}`)
 
     return new YamlFile(file, result)
   }
@@ -42,7 +56,7 @@ export class YamlFile<T = any> {
   }
 
   async write(): Promise<YamlFile<T>> {
-    await fs.writeFile(this.filename, this.contents)
+    await fs.writeFile(this.filename, YAML.dump(this.contents))
 
     return this
   }

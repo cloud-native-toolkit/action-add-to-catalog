@@ -1,0 +1,10 @@
+categories:
+  - category: cluster
+    categoryName: Cluster
+    selection: single
+    modules:
+      - name: IBM Container Platform
+        id: github.com/cloud-native-toolkit/terraform-ibm-container-platform
+        metadataUrl: https://cloud-native-toolkit.github.io/terraform-ibm-container-platform/index.yaml
+        group: openshift
+        cloudProvider: ibm
