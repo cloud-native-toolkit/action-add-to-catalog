@@ -1,11 +1,29 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'action-add-to-catalog'
+description: 'Adds an entry to the catalog index'
+author: 'Cloud Native Toolkit'
 inputs:
-  milliseconds: # change this
+  catalogFile:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'The yaml file where the catalog information is stored'
+    default: 'catalog.yaml'
+  category:
+    required: true
+    description: 'The category of the module'
+  name:
+    required: true
+    description: 'The name of the module in the catalog'
+  id:
+    required: true
+    description: 'The source id of the module (e.g. the git repo slug)'
+  group:
+    required: false
+    description: 'The grouo the module is part of'
+  cloudProvider:
+    required: false
+    description: 'The cloud provider, if applicable, for the module. (E.g. ibm, aws, azure)'
+  softwareProvider:
+    required: false
+    description: 'The provider of the software that will be installed into a cluster, if applicable. (E.g. ibm-cp)'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
