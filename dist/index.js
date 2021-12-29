@@ -120,7 +120,12 @@ class AddToCatalog {
             logger.info(`Validating module name does not exist in the catalog: ${values.name}`);
             this.validateModuleDuplication(catalog.contents, values.name);
             logger.info(`Finding category in catalog: ${values.category}`);
-            const category = (0, util_1.first)(catalog.contents.categories.filter(c => c.category === values.category)).orElseThrow(() => new MissingCategoryError(values.category));
+            const categories = catalog.contents.categories.filter(c => c.category === values.category);
+            if (categories.length === 0) {
+                throw new MissingCategoryError(values.category);
+            }
+            const category = categories[0];
+            logger.info(`Adding new module to catalog`);
             category.modules.push(this.buildModule(values));
             yield catalog.write();
         });

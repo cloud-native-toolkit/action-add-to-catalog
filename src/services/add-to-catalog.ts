@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {Container} from 'typescript-ioc'
-import {first, LoggerApi, YamlFile} from '../util'
+import {LoggerApi, YamlFile} from '../util'
 
 export interface AddToCatalogParams {
   catalogFile: string
@@ -65,10 +65,16 @@ export class AddToCatalog {
     this.validateModuleDuplication(catalog.contents, values.name)
 
     logger.info(`Finding category in catalog: ${values.category}`)
-    const category: CatalogCategory = first(
-      catalog.contents.categories.filter(c => c.category === values.category)
-    ).orElseThrow(() => new MissingCategoryError(values.category))
+    const categories: CatalogCategory[] = catalog.contents.categories.filter(
+      c => c.category === values.category
+    )
+    if (categories.length === 0) {
+      throw new MissingCategoryError(values.category)
+    }
 
+    const category: CatalogCategory = categories[0]
+
+    logger.info(`Adding new module to catalog`)
     category.modules.push(this.buildModule(values))
 
     await catalog.write()
