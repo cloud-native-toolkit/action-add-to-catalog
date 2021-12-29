@@ -74,6 +74,13 @@ export class AddToCatalog {
   }
 
   validateModuleDuplication(catalog: Catalog, name: string): void {
+    if (!catalog) {
+      throw new Error('Catalog missing!!!')
+    }
+    if (!catalog.categories) {
+      throw new Error('Catalog categories missing!!')
+    }
+
     const matchingModules: CatalogModule[] = catalog.categories
       .reduce((result: CatalogModule[], current: CatalogCategory) => {
         const modules = current.modules || []

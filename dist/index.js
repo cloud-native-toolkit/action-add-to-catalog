@@ -125,6 +125,12 @@ class AddToCatalog {
         });
     }
     validateModuleDuplication(catalog, name) {
+        if (!catalog) {
+            throw new Error('Catalog missing!!!');
+        }
+        if (!catalog.categories) {
+            throw new Error('Catalog categories missing!!');
+        }
         const matchingModules = catalog.categories
             .reduce((result, current) => {
             const modules = current.modules || [];
