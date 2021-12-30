@@ -13,8 +13,11 @@ inputs:
     required: true
     description: 'The name of the module in the catalog'
   id:
-    required: true
+    required: false
     description: 'The source id of the module (e.g. the git repo slug)'
+  repoUrl:
+    required: false
+    description: 'The url of the repository'
   group:
     required: false
     description: 'The group the module is part of'
