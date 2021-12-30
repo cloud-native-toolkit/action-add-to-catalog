@@ -40,6 +40,15 @@ const typescript_ioc_1 = __nccwpck_require__(1444);
 const util_1 = __nccwpck_require__(5063);
 const add_to_catalog_1 = __nccwpck_require__(9515);
 const logger_action_1 = __nccwpck_require__(4942);
+const getId = (id, repoUrl) => {
+    if (id) {
+        return id;
+    }
+    if (!repoUrl) {
+        throw new Error('Repo id not provided');
+    }
+    return repoUrl.replace('https://', '');
+};
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         typescript_ioc_1.Container.bind(util_1.LoggerApi).to(logger_action_1.ActionLogger);
@@ -48,10 +57,10 @@ function run() {
             const catalogFile = core.getInput('catalogFile');
             const category = core.getInput('category');
             const name = core.getInput('name');
-            const id = core.getInput('id');
             const group = core.getInput('group');
             const cloudProvider = core.getInput('cloudProvider');
             const softwareProvider = core.getInput('softwareProvider');
+            const id = getId(core.getInput('id'), core.getInput('repoUrl'));
             const input = {
                 catalogFile,
                 category,
@@ -72,7 +81,7 @@ function run() {
         }
     });
 }
-run();
+run().catch(error => console.error(`Error processing action: ${error.message}`));
 
 
 /***/ }),

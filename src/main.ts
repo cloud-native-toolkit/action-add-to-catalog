@@ -4,6 +4,18 @@ import {LoggerApi} from './util'
 import {AddToCatalog} from './services/add-to-catalog'
 import {ActionLogger} from './util/logger/logger.action'
 
+const getId = (id?: string, repoUrl?: string): string => {
+  if (id) {
+    return id
+  }
+
+  if (!repoUrl) {
+    throw new Error('Repo id not provided')
+  }
+
+  return repoUrl.replace('https://', '')
+}
+
 async function run(): Promise<void> {
   Container.bind(LoggerApi).to(ActionLogger)
 
@@ -13,10 +25,10 @@ async function run(): Promise<void> {
     const catalogFile: string = core.getInput('catalogFile')
     const category: string = core.getInput('category')
     const name: string = core.getInput('name')
-    const id: string = core.getInput('id')
     const group: string = core.getInput('group')
     const cloudProvider: string = core.getInput('cloudProvider')
     const softwareProvider: string = core.getInput('softwareProvider')
+    const id: string = getId(core.getInput('id'), core.getInput('repoUrl'))
 
     const input = {
       catalogFile,
@@ -39,4 +51,4 @@ async function run(): Promise<void> {
   }
 }
 
-run()
+run().catch(error => console.error(`Error processing action: ${error.message}`))
