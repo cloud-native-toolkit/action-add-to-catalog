@@ -7,6 +7,7 @@ export interface AddToCatalogParams {
   catalogFile: string
   category: string
   name: string
+  displayName?: string
   id: string
   group?: string
   cloudProvider?: string
@@ -104,6 +105,7 @@ export class AddToCatalog {
 
   buildModule({
     name,
+    displayName,
     id,
     group,
     cloudProvider,
@@ -114,6 +116,7 @@ export class AddToCatalog {
         name,
         id
       },
+      displayName ? {displayName} : {},
       group ? {group} : {},
       cloudProvider ? {cloudProvider} : {},
       softwareProvider ? {softwareProvider} : {}

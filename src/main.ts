@@ -25,6 +25,7 @@ async function run(): Promise<void> {
     const catalogFile: string = core.getInput('catalogFile')
     const category: string = core.getInput('category')
     const name: string = core.getInput('name')
+    const displayName: string = core.getInput('displayName')
     const group: string = core.getInput('group')
     const cloudProvider: string = core.getInput('cloudProvider')
     const softwareProvider: string = core.getInput('softwareProvider')
@@ -34,6 +35,7 @@ async function run(): Promise<void> {
       catalogFile,
       category,
       name,
+      displayName,
       id,
       group,
       cloudProvider,
