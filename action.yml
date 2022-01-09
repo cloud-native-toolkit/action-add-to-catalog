@@ -12,6 +12,9 @@ inputs:
   name:
     required: true
     description: 'The name of the module in the catalog'
+  displayName:
+    required: false
+    description: 'The display name of the module in the catalog'
   id:
     required: false
     description: 'The source id of the module (e.g. the git repo slug)'

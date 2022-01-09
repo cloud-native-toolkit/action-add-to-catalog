@@ -57,6 +57,7 @@ function run() {
             const catalogFile = core.getInput('catalogFile');
             const category = core.getInput('category');
             const name = core.getInput('name');
+            const displayName = core.getInput('displayName');
             const group = core.getInput('group');
             const cloudProvider = core.getInput('cloudProvider');
             const softwareProvider = core.getInput('softwareProvider');
@@ -65,6 +66,7 @@ function run() {
                 catalogFile,
                 category,
                 name,
+                displayName,
                 id,
                 group,
                 cloudProvider,
@@ -157,11 +159,11 @@ class AddToCatalog {
             throw new DuplicateModuleError(matchingModules[0]);
         }
     }
-    buildModule({ name, id, group, cloudProvider, softwareProvider }) {
+    buildModule({ name, displayName, id, group, cloudProvider, softwareProvider }) {
         return Object.assign({
             name,
             id
-        }, group ? { group } : {}, cloudProvider ? { cloudProvider } : {}, softwareProvider ? { softwareProvider } : {});
+        }, displayName ? { displayName } : {}, group ? { group } : {}, cloudProvider ? { cloudProvider } : {}, softwareProvider ? { softwareProvider } : {});
     }
 }
 exports.AddToCatalog = AddToCatalog;
