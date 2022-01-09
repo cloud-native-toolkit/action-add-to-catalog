@@ -113,10 +113,9 @@ export class AddToCatalog {
   }: AddToCatalogParams): CatalogModule {
     return Object.assign(
       {
-        name,
         id
       },
-      displayName ? {displayName} : {},
+      displayName ? {name: displayName} : {name},
       group ? {group} : {},
       cloudProvider ? {cloudProvider} : {},
       softwareProvider ? {softwareProvider} : {}
